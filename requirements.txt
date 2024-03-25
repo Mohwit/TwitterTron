@@ -1,3 +1,4 @@
 requests-oauthlib
 google-generativeai
 python-dotenv
+tweepy

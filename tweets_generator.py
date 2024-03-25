@@ -13,20 +13,24 @@ genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel("models/gemini-pro")
 generation_config = genai.GenerationConfig(temperature=0.1, max_output_tokens=4096)
 
-with open("tweets_history.pickle", "rb") as file:
-    messages = pickle.load(file)
 
-if len(messages) == 0:
-    messages = [{"role": "user", "parts": [system_prompt]}]
-    tweet = model.generate_content(messages)
-    print(tweet.text)
+def get_new_tweet():
+    with open("tweets_history.pickle", "rb") as file:
+        messages = pickle.load(file)
 
-else:
-    messages.append({"role": "user", "parts": ["Provide a new tweet."]})
-    tweet = model.generate_content(messages)
-    print(tweet.text)
+    if len(messages) == 0:
+        messages = [{"role": "user", "parts": [system_prompt]}]
+        tweet = model.generate_content(messages)
+        new_tweet = tweet.text
 
-message = messages.append(tweet.candidates[0].content)
+    else:
+        messages.append({"role": "user", "parts": ["Provide a new tweet."]})
+        tweet = model.generate_content(messages)
+        new_tweet = tweet.text
 
-with open("tweets_history.pickle", "wb") as file:
-    pickle.dump(messages, file)
+    message = messages.append(tweet.candidates[0].content)
+
+    with open("tweets_history.pickle", "wb") as file:
+        pickle.dump(messages, file)
+
+    return new_tweet
