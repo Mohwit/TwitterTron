@@ -4,6 +4,8 @@ name: post_tweet
 on:
   schedule:
     - cron: '12 11,17 * * *' # At 11 and 17 hrs daily
+    
+  workflow_dispatch:
 
 jobs:
   build:
