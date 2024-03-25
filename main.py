@@ -21,7 +21,7 @@ client = tweepy.Client(
 )
 
 
-tweet = get_new_tweet()
+tweet = get_new_tweet()[:279]
 print(tweet)
 response = client.create_tweet(text=tweet)
 print(response)
