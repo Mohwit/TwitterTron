@@ -3,7 +3,7 @@ name: post_tweet
 
 on:
   schedule:
-    - cron: '0 11,17 * * *' # At 11 and 17 hrs daily
+    - cron: '12 11,17 * * *' # At 11 and 17 hrs daily
 
 jobs:
   build:
