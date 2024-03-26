@@ -3,7 +3,7 @@ name: post_tweet
 
 on:
   schedule:
-    - cron: '30 5,14 * * *' # At 10 AM and 8 PM daily in IST (Exact time is in UTC)
+    - cron: '30 5,10,15,19 * * *' # At 10 AM and 8 PM daily in IST (Exact time is in UTC)
     
   workflow_dispatch:
 
