@@ -24,13 +24,23 @@ def get_new_tweet():
         new_tweet = tweet.text
 
     else:
-        messages.append({"role": "user", "parts": ["Provide a new tweet."]})
+        messages.append(
+            {
+                "role": "user",
+                "parts": ["Provide the next tweet."],
+            }
+        )
         tweet = model.generate_content(messages)
         new_tweet = tweet.text
 
-    message = messages.append(tweet.candidates[0].content)
+    messages.append(tweet.candidates[0].content)
 
     with open("tweets_history.pickle", "wb") as file:
         pickle.dump(messages, file)
 
+    print(new_tweet)
     return new_tweet
+
+
+if __name__ == "__main__":
+    get_new_tweet()
