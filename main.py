@@ -3,7 +3,8 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-from tweets_generator import get_new_tweet
+from tweets_generator import get_new_tweet, get_threads
+from utils import extract_tweets
 
 AUTHENTICATION_BEARER_TOKEN = os.getenv("AUTHENTICATION_BEARER_TOKEN")
 CONSUMER_KEY = os.getenv("CONSUMER_KEY")
@@ -21,7 +22,18 @@ client = tweepy.Client(
 )
 
 
-tweet = get_new_tweet()[:279]
-print(tweet)
-response = client.create_tweet(text=tweet)
-print(response)
+# tweet = get_new_tweet()[:279]
+# print(tweet)
+# response = client.create_tweet(text=tweet)
+# print(response)
+
+## to be added
+# -- Post threads ---
+threads = get_threads()
+tweets = extract_tweets(threads)
+response = client.create_tweet(text=tweets[0])
+
+for i in range(1, len(tweets)):
+    response = client.create_tweet(
+        text=tweets[i], in_reply_to_tweet_id=response.data["id"]
+    )
