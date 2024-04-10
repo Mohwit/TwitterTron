@@ -2,8 +2,9 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 import pickle
+from typing import List
 
-from prompt import system_prompt
+from prompt import system_prompt, thread_prompt
 
 load_dotenv()
 
@@ -38,9 +39,35 @@ def get_new_tweet():
     with open("tweets_history.pickle", "wb") as file:
         pickle.dump(messages, file)
 
-    print(new_tweet)
     return new_tweet
 
 
+def get_threads():
+    with open("threads_history.pickle", "rb") as file:
+        threads_history = pickle.load(file)
+    messages = []
+    if len(messages) == 0:
+        messages = [{"role": "user", "parts": [thread_prompt]}]
+        tweet = model.generate_content(messages)
+        thread = tweet.text
+
+    else:
+        messages.append(
+            {
+                "role": "user",
+                "parts": ["Provide the next tweet thread."],
+            }
+        )
+        tweet = model.generate_content(messages)
+        thread = tweet.text
+
+    messages.append(tweet.candidates[0].content)
+
+    with open("threads_history.pickle", "wb") as file:
+        pickle.dump(messages, file)
+
+    return thread
+
+
 if __name__ == "__main__":
-    get_new_tweet()
+    print(get_threads())
